@@ -10,8 +10,10 @@
   "dependencies": {
     "@apollo/datasource-rest": "^5.0.2",
     "@apollo/server": "^4.4.1",
+    "bcryptjs": "^2.4.3",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.1.0"
   },
   "devDependencies": {

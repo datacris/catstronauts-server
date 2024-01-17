@@ -1,6 +1,96 @@
 const gql = require("graphql-tag");
 
 const typeDefs = gql`
+  type Usuario {
+    id: ID
+    nombre: String
+    apellido: String
+    email: String
+    creado: String
+  }
+  type Producto {
+    id: ID
+    nombre: String
+    existencia: Int
+    precio: Float
+    creado: String
+  }
+  type Cliente {
+    id: ID
+    nombre: String
+    apellido: String
+    empresa: String
+    email: String
+    telefono: String
+    vendedor: ID
+  }
+  type Pedido {
+    id: ID
+    pedido: [PedidoGrupo]
+    total: Float
+    cliente: Cliente
+    vendedor: ID
+    estado: EstadoPedido
+    fecha: String
+  }
+  type PedidoGrupo {
+    id: ID
+    cantidad: Int
+    nombre: String
+    precio: Float
+  }
+  type TopClientes {
+    total: Float
+    cliente: [Cliente]
+  }
+  type TopVendedores {
+    total: Float
+    vendedor: [Usuario]
+  }
+  type Token {
+    token: String
+  }
+  input UsuarioInput {
+    nombre: String!
+    apellido: String!
+    email: String!
+    password: String!
+  }
+  input AutenticarInput {
+    email: String!
+    password: String!
+  }
+  input ProductoInput {
+    nombre: String!
+    existencia: Int!
+    precio: Float!
+  }
+  input ClienteInput {
+    nombre: String!
+    apellido: String!
+    empresa: String!
+    email: String!
+    telefono: String
+  }
+  input PedidoProductoInput {
+    id: ID
+    cantidad: Int
+    nombre: String
+    precio: Float
+  }
+  input PedidoInput {
+    pedido: [PedidoProductoInput]
+    total: Float
+    cliente: ID
+    estado: EstadoPedido
+  }
+  enum EstadoPedido {
+    PENDIENTE
+    COMPLETADO
+    CANCELADO
+  }
+
+  # -------------------------------- Query
   type Query {
     "Query to get tracks array for the homepage grid"
     tracksForHome: [Track!]!
@@ -8,21 +98,59 @@ const typeDefs = gql`
     track(id: ID!): Track!
     "Fetch a specific module, provided a module's ID"
     module(id: ID!): Module!
-    "FETCH ALL PRODUCTS"
+
+    # ---------------------CRM PROJECT
+    # ------ Usuarios
+    # la primer version es la siguiente
+    # obtenerUsuario(token: String!): Usuario
+    obtenerUsuario: Usuario
+
+    # ------ Productos
     obtenerProductos: [Producto]
+    obtenerProducto(id: ID!): Producto
+
+    # ------ Clientes
+    obtenerClientes: [Cliente]
+    obtenerClientesVendedor: [Cliente]
+    obtenerCliente(id: ID!): Cliente
+
+    # ------ Pedidos
+    obtenerPedidos: [Pedido]
+    obtenerPedidosVendedor: [Pedido]
+    obtenerPedido(id: ID!): Pedido
+    obtenerPedidosEstado(estado: String!): [Pedido]
+
+    # ------ Busqueda Avanzada
+    mejoresClientes: [TopClientes]
+    mejoresVendedores: [TopVendedores]
+    buscarProducto(texto: String!): [Producto]
   }
 
+  # ----------------------------- Mutations
   type Mutation {
+
+    # ------ Usuarios
+    nuevoUsuario(input: UsuarioInput): Usuario
+    autenticarUsuario(input: AutenticarInput): Token
+
+    # ------ Productos
+    nuevoProducto(input: ProductoInput): Producto
+    actualizarProducto(id: ID!, input: ProductoInput): Producto
+    eliminarProducto(id: ID!): String
+
+    # ------ Clientes
+    nuevoCliente(input: ClienteInput): Cliente
+    actualizarCliente(id: ID!, input: ClienteInput): Cliente
+    eliminarCliente(id: ID!): String
+
+    # ------ Pedidos
+    nuevoPedido(input: PedidoInput): Pedido
+    actualizarPedido(id: ID!, input:PedidoInput): Pedido
+    eliminarPedido(id: ID!): String
+
+
     "Increment the number of views of a given track, when the track card is clicked"
     incrementTrackViews(id: ID!): IncrementTrackViewsResponse!
-  }
-
-  type Producto {
-    id: ID
-    nombre: String
-    existencia: Int
-    precio: Float
-    creado: String
   }
 
   type IncrementTrackViewsResponse {

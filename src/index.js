@@ -11,10 +11,22 @@ async function startApolloServer() {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    introspection: true,
   });
 
   const { url } = await startStandaloneServer(server, {
-    context: async () => {
+    context: async ({ req }) => {
+      const token = req.headers["authorization"] || "";
+      if (token) {
+        try {
+          const usuario = jwt.verify(token.replace('Bearer ', ''), process.env.TOKEN_SECRET);
+          return {
+            usuario,
+          };
+        } catch (error) {
+          console.log("Error en context token ==> ", error);
+        }
+      }
       return {
         dataSources: {
           trackAPI: new TrackAPI(),
