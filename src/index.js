@@ -4,6 +4,7 @@ const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 const TrackAPI = require("./datasources/track-api");
 const conectarDB = require("./config/db");
+const jwt = require("jsonwebtoken");
 
 conectarDB();
 
