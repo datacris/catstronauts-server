@@ -3,6 +3,9 @@ const { startStandaloneServer } = require("@apollo/server/standalone");
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
 const TrackAPI = require("./datasources/track-api");
+const conectarDB = require("./config/db");
+
+conectarDB();
 
 async function startApolloServer() {
   const server = new ApolloServer({

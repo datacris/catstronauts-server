@@ -1,3 +1,4 @@
+const Producto = require("./models/Producto");
 const resolvers = {
   Query: {
     // returns an array of Tracks that will be used to populate the homepage grid of our web client
@@ -13,6 +14,15 @@ const resolvers = {
     // get a single module by ID, for the module detail page
     module: (_, { id }, { dataSources }) => {
       return dataSources.trackAPI.getModule(id);
+    },
+    obtenerProductos: async () => {
+      try {
+        const productos = await Producto.find({});
+        return productos;
+      } catch (error) {
+        console.log("Error en obtenerProductos resolver ==> ", error);
+        throw error;
+      }
     },
   },
   Mutation: {

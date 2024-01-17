@@ -8,11 +8,21 @@ const typeDefs = gql`
     track(id: ID!): Track!
     "Fetch a specific module, provided a module's ID"
     module(id: ID!): Module!
+    "FETCH ALL PRODUCTS"
+    obtenerProductos: [Producto]
   }
 
   type Mutation {
     "Increment the number of views of a given track, when the track card is clicked"
     incrementTrackViews(id: ID!): IncrementTrackViewsResponse!
+  }
+
+  type Producto {
+    id: ID
+    nombre: String
+    existencia: Int
+    precio: Float
+    creado: String
   }
 
   type IncrementTrackViewsResponse {
